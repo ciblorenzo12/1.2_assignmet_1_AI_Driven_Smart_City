@@ -1,1 +1,0 @@
-# 1.2_assignmet_1_AI_Driven_Smart_City
