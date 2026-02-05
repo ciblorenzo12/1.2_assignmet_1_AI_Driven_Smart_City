@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+
+# VS Code local stuff (keep launch/settings if you want)
+.vscode/*.log
+
+# Outputs / generated files
+runs/*.csv
+runs/*.png
+runs/*.gif
+
+# OS
+.DS_Store
+Thumbs.db

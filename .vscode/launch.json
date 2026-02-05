@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run AI City (sim one intersection)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/ai_city/sim_one_intersection.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Run AI City (animate one intersection)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/ai_city/animate_one_intersection.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    }
+  ]
+}
