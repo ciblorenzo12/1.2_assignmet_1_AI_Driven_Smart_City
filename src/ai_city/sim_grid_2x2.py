@@ -1,6 +1,7 @@
 import simpy
 import random
 import pandas as pd
+import joblib
 from dataclasses import dataclass
 
 
@@ -58,6 +59,32 @@ class ActuatedController:
 
         return "HOLD", 1
 
+
+
+@dataclass
+class DecisionTreeTrafficController:
+    model_path: str = r"runs\dt_traffic_model.pkl"
+    min_green: int = 8
+    max_green: int = 40
+
+    def __post_init__(self):
+        self.model = joblib.load(self.model_path)
+
+    def decide(self, inter, now):
+        qns, qew = inter.queues()
+        time_in = now - inter.phase_start
+        phase_is_ns = 1 if inter.phase == "NS" else 0
+
+        # Safety constraints (prevents rapid flip-flopping)
+        if time_in < self.min_green:
+            return "HOLD", 1
+        if time_in >= self.max_green:
+            return "SWITCH", 0
+
+        X = [[qns, qew, phase_is_ns, time_in, inter.red_wait_ns, inter.red_wait_ew]]
+        pred_switch = int(self.model.predict(X)[0])
+
+        return ("SWITCH", 0) if pred_switch == 1 else ("HOLD", 1)
 
 # -----------------------------
 # Agents
@@ -214,6 +241,14 @@ def build_grid_2x2(env, controller_kind="actuated"):
     # C = (0,1)  D = (1,1)
     if controller_kind == "fixed":
         controller = FixedTimeController(green_ns=20, green_ew=20)
+
+    elif controller_kind == "dt":
+        controller = DecisionTreeTrafficController(
+        model_path=r"runs\dt_traffic_model.pkl",
+        min_green=8,
+        max_green=40
+    )
+
     else:
         controller = ActuatedController(min_green=8, max_green=40, bias_threshold=4, force_switch_wait=60)
 
@@ -288,7 +323,7 @@ def run(
     print(f"Avg total wait (s): {avg_wait:.2f}")
     print(f"Throughput (veh/min): {throughput_per_min:.2f}")
 
-    # Optional: also save done/events for later analysis
+    #  save done/events for later analysis
     done_path = r"runs\grid_2x2_done.csv"
     events_path = r"runs\grid_2x2_events.csv"
     done_df.to_csv(done_path, index=False)
