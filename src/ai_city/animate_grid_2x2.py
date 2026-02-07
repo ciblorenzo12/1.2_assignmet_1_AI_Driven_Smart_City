@@ -44,6 +44,8 @@ def animate(csv_path=r"runs\grid_2x2_snapshots.csv", save_gif=False):
     bars = {}
     texts = {}
 
+    count_labels = {}
+
     # Determine a decent max for bar scaling
     q_cols = [c for c in df.columns if c.endswith("_q_ns") or c.endswith("_q_ew")]
     qmax = max(df[q_cols].max().max(), 10)
@@ -58,8 +60,21 @@ def animate(csv_path=r"runs\grid_2x2_snapshots.csv", save_gif=False):
 
         bars[name] = (ns_rect, ew_rect)
         texts[name] = ax.text(x, y - 0.18, name, ha="center")
+        # Numeric queue labels (show exact counts)
+        ns_txt = ax.text(x - 0.12, y + 0.12, "NS:0", ha="center", va="bottom", fontsize=8)
+        ew_txt = ax.text(x + 0.12, y + 0.12, "EW:0", ha="center", va="bottom", fontsize=8)
+        count_labels[name] = (ns_txt, ew_txt)
 
     info = ax.text(0.02, 0.98, "", transform=ax.transAxes, va="top")
+ 
+    legend = ax.text(
+        0.02, 0.90,
+        "Bars: left=NS queue, right=EW queue\n"
+        "Opacity: solid=GREEN, faded=RED",
+        transform=ax.transAxes,
+        va="top",
+        fontsize=9
+        )
 
     def update(i):
         row = df.iloc[i]
@@ -70,6 +85,9 @@ def animate(csv_path=r"runs\grid_2x2_snapshots.csv", save_gif=False):
             qns = int(row[f"{name}_q_ns"])
             qew = int(row[f"{name}_q_ew"])
             phase = row[f"{name}_phase"]
+            ns_txt, ew_txt = count_labels[name]
+            ns_txt.set_text(f"NS:{qns}")
+            ew_txt.set_text(f"EW:{qew}")
 
             ns_rect, ew_rect = bars[name]
             ns_rect.set_height(qns / qmax * 1.0)
@@ -98,4 +116,4 @@ def animate(csv_path=r"runs\grid_2x2_snapshots.csv", save_gif=False):
 
 
 if __name__ == "__main__":
-    animate(save_gif=False)
+    animate(save_gif=True)

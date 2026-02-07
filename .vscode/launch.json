@@ -20,4 +20,7 @@
       "justMyCode": true
     }
   ]
+  "env": {
+  "PYTHONPATH": "${workspaceFolder}/src"
+}
 }

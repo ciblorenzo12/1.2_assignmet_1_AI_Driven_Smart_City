@@ -38,8 +38,7 @@ def plot(out_dir=r"runs", csv_path=r"runs\energy_zones_log.csv"):
 
     # ---- Heatmap: per-zone unmet base demand (req - served)
     # Collect zone names by parsing columns
-        # ---- Heatmap: per-zone unmet base demand (req - served)
-    # Only include real zones (exclude totals like total_req_kw / total_flex_req_kw)
+    
     zone_names = sorted({
         c.replace("_unmet_kw", "")
         for c in df.columns
@@ -47,8 +46,6 @@ def plot(out_dir=r"runs", csv_path=r"runs\energy_zones_log.csv"):
     })
 
     unmet_matrix = [df[f"{z}_unmet_kw"].to_list() for z in zone_names]
-    for z in zone_names:
-        unmet_matrix.append(df[f"{z}_unmet_kw"].to_list())
 
     fig = plt.figure()
     plt.imshow(unmet_matrix, aspect="auto")
