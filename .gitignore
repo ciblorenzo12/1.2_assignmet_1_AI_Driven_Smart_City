@@ -16,3 +16,4 @@ runs/*.gif
 # OS
 .DS_Store
 Thumbs.db
+/runs
