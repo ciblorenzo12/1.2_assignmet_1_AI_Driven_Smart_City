@@ -13,13 +13,15 @@ def add_time_features(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def infer_zone_names(df: pd.DataFrame) -> list[str]:
-    # Only BASE demand columns: <zone>_req_kw (exclude flex columns)
+    # Only BASE demand columns: <zone>_req_kw
+    # Exclude totals, flex columns, and prediction/derived columns (pred_*)
     zones = sorted({
         c.replace("_req_kw", "")
         for c in df.columns
         if c.endswith("_req_kw")
         and not c.startswith("total_")
-        and "_flex_" not in c  # <-- key: don't treat flex columns as zones
+        and not c.startswith("pred_")         
+        and "_flex_" not in c                 
     })
     return zones
 

@@ -17,3 +17,36 @@ runs/*.gif
 .DS_Store
 Thumbs.db
 /runs
+
+
+# --- Unity generated ---
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# --- Visual Studio / Rider / VSCode ---
+.vs/
+.vscode/
+*.csproj
+*.sln
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# --- Unity meta handling ---
+# (DO NOT ignore *.meta; Unity needs them)
+
+# --- OS ---
+.DS_Store
+Thumbs.db
